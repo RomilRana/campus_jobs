@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script>
+        let requestOptionsOneListAppliedJob = {
+        method: 'GET',
+        redirect: 'follow'
+    };
+
+    fetch("http://localhost:8080/list/confirm", requestOptionsOneListAppliedJob)
+        .then(response => response.text())
+        .then(result => {
+            const resultJSON = JSON.parse(result);
+            console.log(resultJSON)
+            let htmlContent = `
+                <table class = "table">
+                    <tr>
+                        <th>status</th>
+                        <th>employer replay</th>
+                        <th>student replay</th>
+                        <th>name</th>
+                        <th>profile</th>
+                        <th>preference</th>
+                        <th>salary_start</th>
+                        <th>salary_end</th>
+                    </tr> 
+            `
+            console.log(resultJSON);
+            for (let index = 0; index < resultJSON.length; index++) {
+                 const element = resultJSON[index];
+            htmlContent += `
+                <tr>
+                    <td>${element.status}</td>
+                    <td>${element.ByAction}</td>
+                    <td>${element.statusByStudent}</td>
+                    <td>${element.jobs.name}</td>
+                    <td>${element.jobs.profile}</td>
+                    <td>${element.jobs.preference}</td>
+                    <td>${element.jobs.salary_start}</td>
+                    <td>${element.jobs.salary_end}</td>
+                </tr>
+                `
+            }                
+            htmlContent += `</table>`;
+
+            document.getElementById("nameOfUser").innerHTML = htmlContent;
+        })
+        .catch(error => console.log('error', error));
+</script>
+</head>
+
+<body>
+    <div>
+        <%- include('./navbar') %>
+    </div>
+    <h1>Applied Jobs </h1>
+    <div id="nameOfUser">
+    </div>
+</body>
+
+</html>

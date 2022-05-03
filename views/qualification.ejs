@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qulification</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script>
+        let requestOptionsQualification = {
+            method: 'GET',
+            redirect: 'follow'
+        };
+
+        fetch("http://localhost:8080/user/findcollegelist", requestOptionsQualification)
+            .then(response => response.text())
+            .then(result => {
+                const resultJSON = JSON.parse(result);
+                console.log(resultJSON);
+                document.qualificationForm.college_id.options.length = 0;
+                for (let index = 0; index < resultJSON.length; index++) {
+                    const element = resultJSON[index];
+                    document.qualificationForm.college_id.options[index] = new Option(element.name, element.id, true, false)
+                }
+            })
+            .catch(error => console.log('error', error));
+
+        function onCollegeChange() {
+            const collegeID = document.getElementsByName("college_id")[0].value;
+            console.log(collegeID)
+            let myHeadersCourse = new Headers();
+            myHeadersCourse.append("Content-Type", "application/json");
+            let rawCourse = JSON.stringify({
+                "id": collegeID
+            });
+
+            let requestOptions = {
+                method: 'POST',
+                headers: myHeadersCourse,
+                body: rawCourse,
+                redirect: 'follow'
+            };
+
+            fetch("http://localhost:8080/cource/findcourceforstudent", requestOptions)
+                .then(response => response.text())
+                .then(result => {
+                    let resultJSON = JSON.parse(result);
+                    console.log(resultJSON)
+                    document.qualificationForm.cource_id.options.length = 0;
+                    for (let index = 0; index < resultJSON.length; index++) {
+                        const element = resultJSON[index];
+                        document.qualificationForm.cource_id.options[index] = new Option(element.name, element.id, true, false)
+                    }
+                })
+                .catch(error => console.log('error', error));
+        }
+    </script>
+</head>
+
+<body>
+    <%- include('./navbar') %>
+        <div class="container">
+            <form method="post" name="qualificationForm" action="/qulification/addqulification">
+                <h1>Qulification</h1>
+
+                College Qualification
+                <select class="custom-select" name="college_id" onchange="onCollegeChange()">
+
+                </select>
+
+                Course
+                <select class="custom-select" name="cource_id">
+
+                </select>
+
+                <div class="form-group">
+                    <label>gpa</label>
+                    <input type="text" name="gpa" class="form-control" placeholder="Enter Your gpa" />
+                </div>
+                <div class="form-group">
+                    <label>main subject</label>
+                    <input type="text" name="main_subject" class="form-control" placeholder="Enter Your main subject" />
+                </div>
+                <div class="form-group">
+                    <label>resume</label>
+                    <input type="text" name="resume" class="form-control" placeholder="Enter Your resume" />
+                </div>
+                <div class="form-group">
+                    <label>backlogs</label>
+                    <input type="number" name="backlogs" class="form-control" placeholder="Enter Your backlogs" />
+                </div>
+                <div class="form-group">
+                    <label>start_year</label>
+                    <input type="number" name="start_year" class="form-control" placeholder="Enter Your start year" />
+                </div>
+                <div class="form-group">
+                    <label>end_year</label>
+                    <input type="number" name="end_year" class="form-control" placeholder="Enter Your end year" />
+                </div>
+                <input type="submit" class="btn btn-primary" value="submit" />
+            </form>
+        </div>
+</body>
+
+</html>

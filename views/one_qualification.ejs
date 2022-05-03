@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <script>
+        let requestOptionsShowShow = {
+        method: 'GET',
+        redirect: 'follow'
+    };
+
+    fetch("http://localhost:8080/qulification/show", requestOptionsShowShow)
+        .then(response => response.text())
+        .then(result => {
+            const resultJSON = JSON.parse(result);
+            let htmlContent = `
+                <table class = "table">
+                    <tr>
+                        <th>Name</th>
+                        <th>email</th>
+                        <th>gpa</th>
+                        <th>main_subject</th>
+                        <th>resume</th>
+                        <th>backlogs</th>
+                        <th>start_year</th>
+                        <th>end_year</th>
+                    </tr> 
+            `
+            console.log(resultJSON);
+            console.log(element.studentInfo);
+            htmlContent += `
+                <tr>
+                    <td>${element.studentInfo.name}</td>
+                    <td>${element.studentInfo.email}</td>
+                    <td>${element.gpa}</td>
+                    <td>${element.main_subject}</td>
+                    <td>${element.resume}</td>
+                    <td>${element.backlogs}</td>
+                    <td>${element.start_year}</td>
+                    <td>${element.end_year}</td>
+                </tr>
+                `
+            htmlContent += `</table>`;
+
+            document.getElementById("nameOfUser").innerHTML = htmlContent;
+        })
+        .catch(error => console.log('error', error));
+</script>
+</head>
+
+<body>
+    <%- include('./navbar') %>
+    <h1>qulification </h1>
+    <div id="nameOfUser">
+    </div>
+</body>
+
+</html>

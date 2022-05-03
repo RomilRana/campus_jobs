@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+
+<body>
+    <%- include('./navbar') %>
+    <div class="container">
+        <form method="post" action="/cource/addcource">
+            <h1 class="mx-auto">Course</h1>
+            <div class="form-group">
+                <label>Name :</label>
+                <input type="text" name="name" class="form-control" placeholder="Enter Your course name:" />
+            </div>
+            <div class="form-group">
+                <label>Duration :</label>
+                <input type="text" name="duration" class="form-control" placeholder="Enter duration" />
+            </div>
+            <input type="submit"  class="btn btn-primary" class="form-control" value="submit" />
+        </form>
+    </div>
+</body>
+
+</html>

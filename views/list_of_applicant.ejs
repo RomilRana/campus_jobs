@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Applicant</title>
+    <script>
+    let requestOptionsShowJobs = {
+        method: 'GET',
+        redirect: 'follow'
+    };
+
+    fetch("http://localhost:8080/list/show", requestOptionsShowJobs)
+        .then(response => response.text())
+        .then(result => {
+            const resultJSON = JSON.parse(result);
+            let htmlContent = `
+                <table  class = "table">
+                    <tr>
+                       <th> Job name </th>
+                       <th> job profile </th>
+                       <th> job preference </th>
+                       <th> job package_info </th>
+                        <th> job salary_start </th>
+                       <th> job salary_end </th>
+                       <th> student name </th>
+
+                    </tr> 
+            `
+            console.log(resultJSON);
+            for (let index = 0; index < resultJSON.length; index++) {
+                    const element = resultJSON[index];
+            htmlContent += `
+                <tr>
+                    <td>${element.jobs.name}</td>
+                    <td>${element.jobs.profile}</td>
+                    <td>${element.jobs.preference}</td>
+                    <td>${element.jobs.package_info}</td>
+                    <td>${element.jobs.salary_start}</td>
+                    <td>${element.jobs.salary_end}</td>
+                    <td>${element.student_info.name}</td>
+                    <td>
+                        <select name="status${element.id}">
+                            <option value="-1">Please select any of the option</option>
+                            <option value="accept">accept</option>
+                            <option value="reject">reject</option>
+                        </select>
+                        </td>
+                        <td>
+                        <button name="updateButton" class="btn btn btn-dark" onclick="updateTheStatusOfStudent(${element.id}, ${element.job_id})"> Update </button>
+                    </td>
+                </tr>
+                `
+            }
+            htmlContent += `</table>`;
+
+            document.getElementById("listofapplicant").innerHTML = htmlContent;
+
+        })
+        .catch(error => console.log('error', error));
+
+
+        function updateTheStatusOfStudent(row_id, id) {
+            console.log(id);
+            let tmpStatus = document.getElementsByName(`status${row_id}`)[0].value;
+            console.log(tmpStatus)
+            if (tmpStatus == -1) {
+                console.log("Please select any of the Approve or Reject Option");
+                alert("Please select any of the Approve or Reject Option");
+                return;
+            }
+
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+
+            var raw = JSON.stringify({
+                "job_id": id,
+                "status": tmpStatus
+            });
+
+            var requestOptions = {
+                method: 'PUT',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+
+            fetch("http://localhost:8080/list/updatestatus", requestOptions)
+                .then(response => response.text())
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
+
+
+        }
+    </script>
+</head>
+<body>
+    <%- include('./navbar') %>
+    <h1> All jobs</h1>
+    <div id="listofapplicant">
+
+    </div>
+</body>
+</html>

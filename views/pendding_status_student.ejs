@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendding</title>
+    <script>
+        let requestOptionsFindPendingStudent = {
+        method: 'GET',
+        redirect: 'follow'
+    };
+
+    fetch("http://localhost:8080/verification/finndpendingstudent", requestOptionsFindPendingStudent)
+        .then(response => response.text())
+        .then(result => {
+            const resultJSON = JSON.parse(result);
+            let htmlContent = `
+                <table class = "table">
+                    <tr>
+                        <th>Collegae Name </th>
+                        <th> year </th>
+                        <th> Course Name </th>
+                        <th> duration </th>
+                        <th> status </th>
+                    </tr> 
+            `
+            console.log(resultJSON);
+            for (let index = 0; index < resultJSON.length; index++) {
+                 const element = resultJSON[index];
+            htmlContent += `
+                <tr>
+                    <td>${element.collegeInfo.name}</td>
+                    <td>${element.year}</td>
+                    <td>${element.course_name.name}</td>
+                    <td>${element.course_name.duration}</td>
+                    <td>${element.status}</td>
+                </tr>
+                `
+            }
+            htmlContent += `</table>`;
+
+            document.getElementById("nameOfUser").innerHTML = htmlContent;
+        })
+        .catch(error => console.log('error', error));
+</script>
+</head>
+
+<body>
+    <%- include('./navbar') %>
+    <h1>Pendding status </h1>
+    <div id="nameOfUser">
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Details</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script>
+        let requestOptionsFindAllCourse = {
+            method: 'GET',
+            redirect: 'follow'
+        };
+
+        fetch("http://localhost:8080/cource/findcource", requestOptionsFindAllCourse)
+            .then(response => response.text())
+            .then(result => {
+                const resultJSON = JSON.parse(result);
+                let htmlContent = `
+                <table  class = "table">
+                    <tr>
+                        <th>name</th>
+                        <th>duration</th>
+                    </tr> 
+            `
+                console.log(resultJSON);
+                for (let index = 0; index < resultJSON.length; index++) {
+                    const element = resultJSON[index];
+                    htmlContent += `
+                <tr>
+                    <td>${element.name}</td>
+                    <td>${element.duration}</td>
+                </tr>
+                `
+                }
+                htmlContent += `</table>`;
+
+                document.getElementById("contactinjobs").innerHTML = htmlContent;
+            })
+            .catch(error => console.log('error', error));
+    </script>
+</head>
+
+<body>
+    <%- include('./navbar') %>
+    <h1> course Details</h1>
+    <div id="contactinjobs">
+    </div>
+</body>
+
+</html>
